@@ -1,0 +1,44 @@
+name: YachiyoApp
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: "16.0"
+
+targets:
+  YachiyoApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      # SwiftUI ソース（README等は除外）
+      - path: YachiyoApp
+        excludes:
+          - "**/*.md"
+      # Web UI 一式を「フォルダ参照」として同梱（ディレクトリ構造を保持）
+      # → アプリ内で web-prototype/ として参照でき、Pagesとソースを共有できる
+      - path: web-prototype
+        type: folder
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.yachiyoapp
+        SWIFT_VERSION: "5.9"
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UIStatusBarHidden: YES
+        INFOPLIST_KEY_UIViewControllerBasedStatusBarAppearance: NO
+        INFOPLIST_KEY_UIRequiresFullScreen: YES
+        INFOPLIST_KEY_NSCameraUsageDescription: "キャラクターに写真や景色を見せるために使用します"
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: "音声で話しかけるために使用します"
+        INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: "話した内容を文字に変換するために使用します"
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+
+schemes:
+  YachiyoApp:
+    build:
+      targets:
+        YachiyoApp: all
+    archive:
+      config: Release
