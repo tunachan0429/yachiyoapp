@@ -1,0 +1,182 @@
+:root {
+  --screen-w: 390px;
+  --screen-h: 844px;
+  --ink: #eaf0ff;
+  --teal: #4fb0ad;
+  --teal-dark: #2f7e7d;
+  --pill: rgba(20, 30, 66, 0.55);
+  --pill-border: rgba(150, 170, 230, 0.28);
+  --reply: rgba(40, 34, 78, 0.55);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Zen Maru Gothic", "Noto Sans JP", sans-serif;
+  background: radial-gradient(120% 120% at 50% 0%, #1a2350 0%, #0c1030 60%, #06081c 100%);
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 28px 12px; color: var(--ink);
+}
+.stage-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+/* ---------- iPhone frame ---------- */
+.phone {
+  width: calc(var(--screen-w) + 24px);
+  height: calc(var(--screen-h) + 24px);
+  background: linear-gradient(160deg, #2a2a30, #0c0c10);
+  border-radius: 58px; padding: 12px;
+  box-shadow: 0 40px 80px rgba(0,0,0,.6), inset 0 0 0 2px rgba(255,255,255,.06);
+}
+.screen {
+  position: relative; width: var(--screen-w); height: var(--screen-h);
+  border-radius: 47px; overflow: hidden; background: #0a1030; isolation: isolate;
+}
+
+/* ---------- Cosmic background ---------- */
+.bg-cosmos { position: absolute; inset: 0; z-index: 0; }
+.nebula {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(70% 45% at 50% 12%, rgba(90,110,200,.25), transparent 70%),
+    linear-gradient(180deg, #1d2a5c 0%, #182253 40%, #10163b 70%, #0a0f2a 100%);
+}
+.moon {
+  position: absolute; top: 92px; right: -30px;
+  width: 150px; height: 150px; border-radius: 50%;
+  background: radial-gradient(circle at 38% 38%, #b7c0d8, #7f8bb0 55%, #5b6690 100%);
+  box-shadow: 0 0 60px rgba(150,170,220,.35);
+  opacity: .85;
+}
+.vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(120% 90% at 50% 45%, transparent 58%, rgba(0,0,0,.5) 100%);
+}
+.stars { position: absolute; inset: 0; }
+.stars i {
+  position: absolute; width: 2px; height: 2px; border-radius: 50%;
+  background: #fff; opacity: .8; animation: twinkle var(--d,3s) infinite ease-in-out;
+}
+@keyframes twinkle { 0%,100%{opacity:.15;} 50%{opacity:.9;} }
+
+/* ---------- Status bar ---------- */
+.statusbar {
+  position: relative; z-index: 6; height: 44px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 22px; font-family: "Noto Sans JP"; font-weight: 600; font-size: 14px;
+}
+.sb-left { display: flex; align-items: center; gap: 6px; }
+.sb-signal { display: flex; align-items: flex-end; gap: 2px; height: 11px; }
+.sb-signal i { width: 3px; background: var(--ink); border-radius: 1px; }
+.sb-signal i:nth-child(1){height:4px;} .sb-signal i:nth-child(2){height:6px;}
+.sb-signal i:nth-child(3){height:8px;} .sb-signal i:nth-child(4){height:11px;}
+.sb-carrier { font-size: 13px; opacity: .95; }
+.sb-right { display: flex; align-items: center; gap: 6px; }
+.sb-pct { font-size: 13px; }
+.sb-battery { width: 24px; height: 12px; border: 1.5px solid var(--ink); border-radius: 3px; padding: 1.5px; position: relative; }
+.sb-battery::after { content:""; position:absolute; right:-4px; top:3px; width:2px; height:5px; background:var(--ink); border-radius:1px; }
+.sb-battery i { display:block; height:100%; width:100%; background: var(--ink); border-radius:1px; }
+
+/* ---------- Top bar ---------- */
+.topbar {
+  position: relative; z-index: 6;
+  display: flex; align-items: center; gap: 10px; padding: 8px 16px 0;
+}
+.hamburger { background: none; border: none; color: var(--ink); cursor: pointer; padding: 4px; }
+.conv-pill {
+  flex: 1; display: flex; align-items: center; gap: 8px;
+  background: var(--pill); border: 1px solid var(--pill-border);
+  color: var(--ink); border-radius: 24px; padding: 11px 14px; cursor: pointer;
+  backdrop-filter: blur(10px); font-family: "Noto Sans JP"; font-size: 14px;
+}
+.conv-ic { opacity: .9; }
+.conv-label { flex: 1; text-align: left; }
+.conv-chevron { opacity: .8; }
+.capture-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--pill); border: 1px solid var(--pill-border);
+  color: var(--ink); border-radius: 24px; padding: 11px 14px; cursor: pointer;
+  backdrop-filter: blur(10px); font-family: "Noto Sans JP"; font-size: 12px; font-weight: 700; letter-spacing: .5px;
+}
+
+/* ---------- Character stage ---------- */
+.stage {
+  position: absolute; z-index: 3; left: 0; right: 0; top: 96px; bottom: 220px;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.character {
+  position: relative; width: 82%; height: 100%;
+  display: flex; align-items: flex-end; justify-content: center;
+  filter: drop-shadow(0 10px 34px rgba(0,0,0,.45));
+  animation: floaty 6s ease-in-out infinite;
+}
+.umbrella { position: absolute; top: 4%; left: 50%; transform: translateX(-50%); }
+.figure { position: relative; height: 82%; }
+.placeholder-tag {
+  position: absolute; top: 46%; left: 50%; transform: translate(-50%,-50%);
+  font-family: "Noto Sans JP"; font-size: 11px; color: rgba(255,255,255,.55);
+  background: rgba(0,0,0,.35); padding: 3px 10px; border-radius: 12px;
+  border: 1px dashed rgba(255,255,255,.3); white-space: nowrap;
+}
+@keyframes floaty { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+
+/* ---------- Reply box (返信) ---------- */
+.reply-box {
+  position: absolute; z-index: 6; left: 16px; right: 16px; bottom: 150px;
+  background: var(--reply); border: 1px solid rgba(150,140,220,.3);
+  border-radius: 20px; padding: 14px 18px; backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+.reply-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; text-shadow: 0 1px 4px rgba(0,0,0,.4); }
+.reply-text { font-size: 13px; line-height: 1.7; font-weight: 400; opacity: .92; }
+.reply-text .caret { display:inline-block; width:2px; height:1em; background:#c9baff; margin-left:2px; vertical-align:-2px; animation:blink 1s step-end infinite; }
+@keyframes blink { 50%{opacity:0;} }
+
+/* ---------- Toolbar (4 teal buttons) ---------- */
+.toolbar {
+  position: absolute; z-index: 6; left: 0; right: 0; bottom: 92px;
+  display: flex; align-items: center; justify-content: space-evenly; padding: 0 20px;
+}
+.tool {
+  width: 54px; height: 54px; border-radius: 50%;
+  display: grid; place-items: center; cursor: pointer;
+  color: #eafffd;
+  background: linear-gradient(160deg, rgba(90,190,186,.55), rgba(47,126,125,.55));
+  border: 1px solid rgba(150,230,225,.35);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 14px rgba(0,0,0,.3), inset 0 1px 2px rgba(255,255,255,.25);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.tool:active { transform: scale(.9); }
+.tool.listening { box-shadow: 0 0 0 4px rgba(120,230,220,.4), 0 4px 14px rgba(0,0,0,.3); animation: mic-pulse 1s infinite; }
+@keyframes mic-pulse { 0%,100%{box-shadow:0 0 0 4px rgba(120,230,220,.35);} 50%{box-shadow:0 0 0 9px rgba(120,230,220,.12);} }
+
+/* ---------- Chat input ---------- */
+.chat-input {
+  position: absolute; z-index: 6; left: 16px; right: 16px; bottom: 42px;
+  display: flex; align-items: center; gap: 10px;
+  background: var(--pill); border: 1px solid var(--pill-border);
+  border-radius: 28px; padding: 8px 8px 8px 16px; backdrop-filter: blur(12px);
+}
+.chat-ic { opacity: .7; flex-shrink: 0; }
+#chat-field {
+  flex: 1; background: none; border: none; outline: none; color: var(--ink);
+  font-family: "Noto Sans JP"; font-size: 14px;
+}
+#chat-field::placeholder { color: rgba(230,235,255,.55); }
+.send-btn {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  border: 1px solid rgba(150,230,225,.35); cursor: pointer; color: #eafffd;
+  background: linear-gradient(160deg, rgba(90,190,186,.5), rgba(47,126,125,.5));
+  display: grid; place-items: center; transition: transform .15s ease;
+}
+.send-btn:active { transform: scale(.9); }
+
+/* ---------- Disclaimer ---------- */
+.disclaimer {
+  position: absolute; z-index: 6; left: 0; right: 0; bottom: 14px;
+  text-align: center; font-family: "Noto Sans JP"; font-size: 10px;
+  color: rgba(220,225,255,.45);
+}
+
+.hint { font-family:"Noto Sans JP"; font-size:12px; opacity:.5; max-width:414px; text-align:center; }
