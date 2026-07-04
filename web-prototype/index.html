@@ -55,7 +55,11 @@
 
         <!-- Character stage (Live2D モデルをここに配置) -->
         <div class="stage">
-          <div class="character" id="character" aria-label="Live2Dモデル(プレースホルダー)">
+          <div class="character" id="character" aria-label="Live2Dモデル">
+            <!-- Live2D 描画キャンバス（モデル配置時に使用） -->
+            <canvas id="live2d-canvas"></canvas>
+            <!-- プレースホルダー（モデル未配置時に表示） -->
+            <div id="char-placeholder">
             <!-- Umbrella -->
             <svg class="umbrella" viewBox="0 0 260 200" width="86%">
               <defs>
@@ -99,7 +103,8 @@
               <path fill="#3fb6a8" d="M120 340l30 14 30-14 22 150c-34 16-70 16-104 0Z"/>
               <rect x="132" y="250" width="36" height="120" fill="#6b4a9e" opacity=".85"/>
             </svg>
-            <span class="placeholder-tag">Live2D モデル配置エリア</span>
+            <span class="placeholder-tag" id="model-note">Live2D モデル配置エリア</span>
+            </div>
           </div>
         </div>
 
@@ -140,9 +145,14 @@
       </div>
     </div>
 
-    <p class="hint">中央はLive2Dモデルのプレースホルダーです（後で所有モデルに差し替え）。返信は4ボタンの上のボックスに出力されます。</p>
+    <p class="hint">中央のキャラは model/ にファイルを置くとLive2Dで描画されます（未配置時はプレースホルダー）。返信は4ボタンの上のボックスに出力されます。</p>
   </div>
 
+  <!-- Live2D: Cubism Core はローカル(lib/)に置く。PIXI と pixi-live2d-display はブラウザ確認用にCDNから読込 -->
+  <script src="lib/live2dcubismcore.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pixi.js@6.5.2/dist/browser/pixi.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/dist/cubism4.min.js"></script>
+  <script src="live2d.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
