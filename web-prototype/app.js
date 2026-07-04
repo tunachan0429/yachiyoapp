@@ -5,7 +5,7 @@
   for (let i = 0; i < n; i++) {
     const s = document.createElement("i");
     s.style.left = Math.random() * 100 + "%";
-    s.style.top = Math.random() * 100 + "%";
+    s.style.top = Math.random() * 70 + "%";
     s.style.setProperty("--d", (2 + Math.random() * 3).toFixed(1) + "s");
     s.style.animationDelay = (Math.random() * 3).toFixed(1) + "s";
     const size = Math.random() < 0.2 ? 3 : Math.random() < 0.5 ? 2 : 1;
@@ -15,51 +15,66 @@
   }
 })();
 
-// ---- セリフのタイプライター表示（ローカルAI応答のプレースホルダー）----
-const dialogueEl = document.getElementById("dialogue-text");
-const lines = [
-  "こんばんは。今日も来てくれてうれしいな。",
-  "こうして話せる時間が、わたしはいちばん好きなの。",
-  "ねえ、今日はどんな一日だった？　なんでも聞かせて。",
-];
+// ---- 返信ボックス（向こうからの応答）----
+const replyTitle = document.getElementById("reply-title");
+const replyText = document.getElementById("reply-text");
 
-let li = 0;
-function typeLine(text, done) {
-  dialogueEl.innerHTML = "";
+// キャラのローカルAI応答（今はダミー。後でローカルLLMに接続）
+function characterReply(userText) {
+  const canned = [
+    "うん、聞いてるよ。それでそれで？",
+    "なるほどね。もう少し話してみて？",
+    "そっか。今日はゆっくりしようね。",
+    "ふふ、あなたと話せてうれしいな。",
+  ];
+  if (userText && userText.includes("こんにちは")) return "こんにちは！会えてうれしい。";
+  return canned[Math.floor(Math.random() * canned.length)];
+}
+
+function typeReply(title, text) {
+  replyTitle.textContent = title;
+  replyText.innerHTML = "";
   let i = 0;
   const caret = document.createElement("span");
   caret.className = "caret";
+  replyText.appendChild(caret);
   const timer = setInterval(() => {
     if (i < text.length) {
-      dialogueEl.insertBefore(document.createTextNode(text[i]), caret);
+      replyText.insertBefore(document.createTextNode(text[i]), caret);
       i++;
     } else {
       clearInterval(timer);
-      setTimeout(done, 2200);
+      setTimeout(() => caret.remove(), 800);
     }
-  }, 55);
-  dialogueEl.appendChild(caret);
+  }, 45);
 }
-function loopLines() {
-  typeLine(lines[li], () => {
-    li = (li + 1) % lines.length;
-    loopLines();
-  });
-}
-loopLines();
 
-// ---- ボタンの仮動作 ----
-const mic = document.querySelector(".tool.mic");
+// ---- チャット送信 ----
+const field = document.getElementById("chat-field");
+const sendBtn = document.getElementById("send-btn");
+
+function send() {
+  const t = field.value.trim();
+  if (!t) return;
+  typeReply("かぐや", "……"); // 考え中
+  field.value = "";
+  setTimeout(() => typeReply("かぐや", characterReply(t)), 600);
+}
+sendBtn.addEventListener("click", send);
+field.addEventListener("keydown", (e) => { if (e.key === "Enter") send(); });
+
+// ---- ツールボタン ----
+const mic = document.getElementById("mic");
 mic.addEventListener("click", () => {
   mic.classList.toggle("listening");
   if (mic.classList.contains("listening")) {
-    typeLine("うん、聞いてるよ。ゆっくり話してね。", () => {});
+    typeReply("かぐや", "うん、聞いてるよ。ゆっくり話してね。");
   }
 });
 
-document.querySelectorAll(".tool:not(.mic)").forEach((btn) => {
+document.querySelectorAll(".tool:not(#mic)").forEach((btn) => {
   btn.addEventListener("click", () => {
-    const label = btn.querySelector(".tool-label")?.textContent || "";
-    typeLine(`「${label}」を開くね。`, () => setTimeout(loopLines, 1500));
+    const label = btn.getAttribute("data-label") || "";
+    typeReply("かぐや", `「${label}」だね。`);
   });
 });
